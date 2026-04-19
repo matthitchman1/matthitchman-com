@@ -11,10 +11,6 @@
     "Referrer-Policy": "strict-origin-when-cross-origin",
     "Permissions-Policy": "geolocation=(), microphone=(), camera=()"
   },
-  "routes": [
-    { "route": "/blog", "redirect": "/blog.html", "statusCode": 301 },
-    { "route": "/about", "redirect": "/about.html", "statusCode": 301 }
-  ],
   "responseOverrides": {
     "404": {
       "rewrite": "/404.html",
