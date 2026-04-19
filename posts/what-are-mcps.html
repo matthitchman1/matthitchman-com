@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>What the hell is an MCP, actually? — Matt Hitchman</title>
+  <title>What the hell is an MCP, actually? · Matt Hitchman</title>
   <meta name="description" content="A plain-English explainer of the Model Context Protocol for curious professionals." />
   <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -38,7 +38,7 @@
       </header>
 
       <p>
-        MCP stands for Model Context Protocol. If that tells you nothing — good. Acronyms are
+        MCP stands for Model Context Protocol. If that tells you nothing, good. Acronyms are
         gatekeeping. Let me explain it like you're a smart human who's never heard of it.
       </p>
 
@@ -46,14 +46,14 @@
 
       <p>
         MCP is a standard way for AI models to plug into external tools and data. Think USB-C, but
-        for AI — instead of every app inventing its own weird cable, they all use the same one.
+        for AI, instead of every app inventing its own weird cable, they all use the same one.
       </p>
 
       <h2>The analogy</h2>
 
       <p>
         Imagine Claude is a very smart new employee on their first day. They have general knowledge
-        — they know how the world works — but they don't know anything about <em>your</em> company.
+       , they know how the world works, but they don't know anything about <em>your</em> company.
         They can't see your files. They don't know your customers. They've never looked at your calendar.
       </p>
 
@@ -66,7 +66,7 @@
 
       <p>
         MCP is option 2. Each "keycard" is an <strong>MCP server</strong>. The server exposes a set of
-        <strong>tools</strong> the AI can call — things like <code>search_files</code>,
+        <strong>tools</strong> the AI can call, things like <code>search_files</code>,
         <code>list_events</code>, <code>create_ticket</code>. The AI decides when to swipe the
         card based on what you're asking for.
       </p>
@@ -88,7 +88,7 @@
 
       <blockquote>
         MCP is the thing that lets your AI read your files, check your calendar, and send
-        your emails — without every app having to do it a different way.
+        your emails, without every app having to do it a different way.
       </blockquote>
 
       <h2>What an MCP server actually is</h2>
@@ -114,7 +114,7 @@ if __name__ == "__main__":
 
       <p>
         That's it. That's a working MCP server. Claude can now call the <code>add</code> tool and
-        get the result. You can make tools that read files, query APIs, hit your database — anything
+        get the result. You can make tools that read files, query APIs, hit your database, anything
         a Python function can do.
       </p>
 
@@ -123,9 +123,9 @@ if __name__ == "__main__":
       <p>Three pieces:</p>
 
       <ul>
-        <li><strong>The model</strong> (Claude, GPT, whatever) — the brain.</li>
-        <li><strong>The client</strong> (Claude Desktop, Cursor, a custom agent) — what you talk to.</li>
-        <li><strong>The MCP server</strong> — a small program offering tools the brain can call.</li>
+        <li><strong>The model</strong> (Claude, GPT, whatever), the brain.</li>
+        <li><strong>The client</strong> (Claude Desktop, Cursor, a custom agent), what you talk to.</li>
+        <li><strong>The MCP server</strong>, a small program offering tools the brain can call.</li>
       </ul>
 
       <p>
@@ -140,14 +140,14 @@ if __name__ == "__main__":
 
       <ul>
         <li>Install Claude Desktop.</li>
-        <li>Add the filesystem MCP server (it comes as an npm package you add to a config file — the docs walk you through it).</li>
+        <li>Add the filesystem MCP server (it comes as an npm package you add to a config file, the docs walk you through it).</li>
         <li>Ask Claude "what's in my downloads folder?".</li>
         <li>Watch it call the tool, read your folder, and tell you.</li>
       </ul>
 
       <p>
         That "holy crap, it actually did the thing" moment is what got me hooked. I wrote my own
-        MCP server a few weeks later — it's called
+        MCP server a few weeks later, it's called
         <a href="/posts/building-hiki.html" class="link">HIKI</a>, and it gave Claude a memory
         of me.
       </p>
@@ -162,11 +162,11 @@ if __name__ == "__main__":
       <p>Does that make more sense now?</p>
 
       <p>
-        Questions welcome — <a href="mailto:matt@matthitchman.com" class="link">matt@matthitchman.com</a>.
+        Questions welcome, <a href="mailto:matt@matthitchman.com" class="link">matt@matthitchman.com</a>.
       </p>
 
       <p class="faint" style="margin-top: var(--sp-7); font-size: 0.875rem;">
-        — Matt
+        Matt
       </p>
     </article>
   </main>

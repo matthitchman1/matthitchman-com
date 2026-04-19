@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>I gave Claude a memory. Here's how. — Matt Hitchman</title>
+  <title>I gave Claude a memory. Here's how. · Matt Hitchman</title>
   <meta name="description" content="Build log: a personal markdown wiki (HIKI) served to Claude via a custom MCP connector, running on a Mac mini at home." />
   <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -43,7 +43,7 @@
 
       <p>
         New chat, new Claude. I'd spend the first five minutes every session re-explaining the same
-        context — what I'm working on, what tools I use, that I'm based in New Zealand, that I code
+        context, what I'm working on, what tools I use, that I'm based in New Zealand, that I code
         mostly in Python, that I did legs yesterday and my hamstrings are wrecked. You know, the
         things a smart mate would just <em>know</em> about me.
       </p>
@@ -58,7 +58,7 @@
       <p>Here's the whole thing as a diagram in words:</p>
 
       <ul>
-        <li>A folder of markdown files on my <strong>Mac mini at home</strong> — one file per topic. <code>workouts.md</code>, <code>ai.md</code>, <code>microsoft.md</code>, etc.</li>
+        <li>A folder of markdown files on my <strong>Mac mini at home</strong>, one file per topic. <code>workouts.md</code>, <code>ai.md</code>, <code>microsoft.md</code>, etc.</li>
         <li>A small Python server on that Mac mini that serves the folder as a set of <strong>MCP tools</strong>.</li>
         <li>A <strong>Cloudflare Tunnel</strong> so my Mac mini is reachable from the internet without me poking holes in my home router.</li>
         <li>A tiny <strong>Cloudflare Worker</strong> in front, handling OAuth so random people on the internet can't just read my workout log.</li>
@@ -75,7 +75,7 @@
 
       <p>
         This felt wrong at first. Surely a real engineer would use a real database. But then I asked
-        myself what I actually needed — and the answer was "a file I can hand to an LLM". Which is
+        myself what I actually needed, and the answer was "a file I can hand to an LLM". Which is
         what a markdown file is. The LLM does the searching. The LLM does the filtering. The file
         system just has to be a file system.
       </p>
@@ -95,7 +95,7 @@
       <p>
         There is a Mac mini on a shelf in my living room. It's the M2 base model. It hums quietly
         to itself. It hosts HIKI and will eventually host other things too. I looked at deploying
-        to a cloud VM and the math didn't work out — my Mac mini has been paid off for years, uses
+        to a cloud VM and the math didn't work out, my Mac mini has been paid off for years, uses
         almost no electricity, and doesn't care about my traffic volume (which is one user, me).
       </p>
 
@@ -115,7 +115,7 @@
         Cloudflare Tunnel solves this. You install <code>cloudflared</code> on the Mac. It makes
         an outbound connection to Cloudflare. Cloudflare then routes inbound requests to your
         tunnel, which forwards them to your local Python server. From the internet's perspective,
-        there's a hostname — <code>hiki.matthitchman.com</code> — that happens to live on a shelf
+        there's a hostname, <code>hiki.matthitchman.com</code>, that happens to live on a shelf
         in my house.
       </p>
 
@@ -144,7 +144,7 @@
       <p>Plenty.</p>
 
       <ul>
-        <li>First version had the Python server returning the wrong content-type. Claude just silently ignored everything. Took me an hour to spot because there were no errors — just no tools.</li>
+        <li>First version had the Python server returning the wrong content-type. Claude just silently ignored everything. Took me an hour to spot because there were no errors, just no tools.</li>
         <li>OAuth redirect loop because I'd pasted the wrong callback URL. Classic.</li>
         <li>One markdown file had a broken YAML frontmatter block. The MCP server crashed every time Claude tried to list tools. Fixed with a <code>try/except</code> that now skips broken files and logs them.</li>
         <li>At one point Claude confidently told me I hadn't been to the gym in three weeks. I had. The clock on the Mac mini had drifted. That was a fun afternoon.</li>
@@ -152,7 +152,7 @@
 
       <p>
         None of these were hard. All of them took longer than I wanted. This is what "shipping"
-        really looks like — 80% of it is boring plumbing that you didn't know you'd need to care
+        really looks like, 80% of it is boring plumbing that you didn't know you'd need to care
         about.
       </p>
 
@@ -179,7 +179,7 @@
       <ul>
         <li>Use Claude (or an MCP-compatible client) a lot</li>
         <li>Hate re-explaining yourself</li>
-        <li>Can run a small Python server somewhere — a Mac mini, a $5 VPS, even a Raspberry Pi</li>
+        <li>Can run a small Python server somewhere, a Mac mini, a $5 VPS, even a Raspberry Pi</li>
         <li>Are willing to spend a weekend on it</li>
       </ul>
 
@@ -189,11 +189,11 @@
       </p>
 
       <p>
-        Questions welcome — <a href="mailto:matt@matthitchman.com" class="link">matt@matthitchman.com</a>.
+        Questions welcome, <a href="mailto:matt@matthitchman.com" class="link">matt@matthitchman.com</a>.
       </p>
 
       <p class="faint" style="margin-top: var(--sp-7); font-size: 0.875rem;">
-        — Matt
+        Matt
       </p>
     </article>
   </main>
