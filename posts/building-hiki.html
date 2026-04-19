@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>I gave Claude a memory. Here's how. — Matt Hitchman</title>
+  <meta name="description" content="Build log: a personal markdown wiki (HIKI) served to Claude via a custom MCP connector, running on a Mac mini at home." />
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/styles.css" />
+</head>
+<body>
+  <a href="#main" class="skip">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container nav">
+      <a href="/" class="brand" aria-label="matthitchman.com home">
+        <img src="/assets/logo.svg" alt="matthitchman.com" width="151" height="22" />
+      </a>
+      <nav class="nav-links" aria-label="Primary">
+        <a href="/">Home</a>
+        <a href="/about.html">About</a>
+        <a href="/blog.html" class="active">Blog</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <article class="article">
+      <a href="/blog.html" class="back-link">&larr; All posts</a>
+
+      <header>
+        <span class="eyebrow">Build log · April 2026</span>
+        <h1>I gave Claude a memory. Here's how<span class="dot">.</span></h1>
+        <div class="post-meta"><span class="tag">Build log</span><span>April 2026</span><span>7 min read</span></div>
+      </header>
+
+      <p>
+        The thing that annoyed me most about Claude, for months, was that it forgot me every time.
+      </p>
+
+      <p>
+        New chat, new Claude. I'd spend the first five minutes every session re-explaining the same
+        context — what I'm working on, what tools I use, that I'm based in New Zealand, that I code
+        mostly in Python, that I did legs yesterday and my hamstrings are wrecked. You know, the
+        things a smart mate would just <em>know</em> about me.
+      </p>
+
+      <p>
+        So I built one. A personal wiki Claude can read. I called it HIKI, because it's a wiki and
+        my surname is Hitchman. It's not clever. It's just mine.
+      </p>
+
+      <h2>The shape of it</h2>
+
+      <p>Here's the whole thing as a diagram in words:</p>
+
+      <ul>
+        <li>A folder of markdown files on my <strong>Mac mini at home</strong> — one file per topic. <code>workouts.md</code>, <code>ai.md</code>, <code>microsoft.md</code>, etc.</li>
+        <li>A small Python server on that Mac mini that serves the folder as a set of <strong>MCP tools</strong>.</li>
+        <li>A <strong>Cloudflare Tunnel</strong> so my Mac mini is reachable from the internet without me poking holes in my home router.</li>
+        <li>A tiny <strong>Cloudflare Worker</strong> in front, handling OAuth so random people on the internet can't just read my workout log.</li>
+        <li>Claude (on any device, any app) connects to that Worker as an MCP server. And now Claude knows me.</li>
+      </ul>
+
+      <p>Total lines of code: a lot less than you'd think.</p>
+
+      <h2>Why markdown, not a database</h2>
+
+      <p>
+        The whole thing runs on flat markdown files. Not Postgres. Not a vector database. Not even SQLite.
+      </p>
+
+      <p>
+        This felt wrong at first. Surely a real engineer would use a real database. But then I asked
+        myself what I actually needed — and the answer was "a file I can hand to an LLM". Which is
+        what a markdown file is. The LLM does the searching. The LLM does the filtering. The file
+        system just has to be a file system.
+      </p>
+
+      <blockquote>
+        If the model can read the whole file in context, you don't need a fancy retrieval layer.
+        You just need a file.
+      </blockquote>
+
+      <p>
+        This is a theme for me. Most "AI infrastructure" is solving problems you don't have yet.
+        Start with a file.
+      </p>
+
+      <h2>The Mac mini, embarrassingly</h2>
+
+      <p>
+        There is a Mac mini on a shelf in my living room. It's the M2 base model. It hums quietly
+        to itself. It hosts HIKI and will eventually host other things too. I looked at deploying
+        to a cloud VM and the math didn't work out — my Mac mini has been paid off for years, uses
+        almost no electricity, and doesn't care about my traffic volume (which is one user, me).
+      </p>
+
+      <p>
+        Is it "production-grade"? No. Do I care? Also no. This is a personal project. Personal
+        projects are allowed to run on a Mac mini in your lounge.
+      </p>
+
+      <h2>The Cloudflare Tunnel trick</h2>
+
+      <p>
+        The bit I was most worried about was exposing the Mac mini to the internet. I don't want
+        to open ports on my router. I don't want a static IP. I don't want to think about NAT.
+      </p>
+
+      <p>
+        Cloudflare Tunnel solves this. You install <code>cloudflared</code> on the Mac. It makes
+        an outbound connection to Cloudflare. Cloudflare then routes inbound requests to your
+        tunnel, which forwards them to your local Python server. From the internet's perspective,
+        there's a hostname — <code>hiki.matthitchman.com</code> — that happens to live on a shelf
+        in my house.
+      </p>
+
+      <p>
+        No port forwarding. No firewall config. No VPN. It just works. This was the moment I
+        realised Cloudflare is secretly the coolest company in computing.
+      </p>
+
+      <h2>OAuth, which I didn't want to write</h2>
+
+      <p>
+        The tunnel made the server reachable, but I didn't want it readable by anyone on the
+        internet who typed the URL. The Claude MCP spec wants OAuth. I do not want to write
+        OAuth.
+      </p>
+
+      <p>
+        So I didn't. I put a Cloudflare Worker in front of the tunnel that handles OAuth using a
+        small open-source library called MCPVault. The Worker checks the token, then forwards to
+        the tunnel. That's the whole story. The Worker lives at <code>mcp.matthitchman.com</code>.
+        It's maybe 100 lines of TypeScript.
+      </p>
+
+      <h2>What broke</h2>
+
+      <p>Plenty.</p>
+
+      <ul>
+        <li>First version had the Python server returning the wrong content-type. Claude just silently ignored everything. Took me an hour to spot because there were no errors — just no tools.</li>
+        <li>OAuth redirect loop because I'd pasted the wrong callback URL. Classic.</li>
+        <li>One markdown file had a broken YAML frontmatter block. The MCP server crashed every time Claude tried to list tools. Fixed with a <code>try/except</code> that now skips broken files and logs them.</li>
+        <li>At one point Claude confidently told me I hadn't been to the gym in three weeks. I had. The clock on the Mac mini had drifted. That was a fun afternoon.</li>
+      </ul>
+
+      <p>
+        None of these were hard. All of them took longer than I wanted. This is what "shipping"
+        really looks like — 80% of it is boring plumbing that you didn't know you'd need to care
+        about.
+      </p>
+
+      <h2>Does it actually work?</h2>
+
+      <p>Yes. A typical day:</p>
+
+      <ul>
+        <li>I tell Claude "log today's workout: push day, bench 3x8 at 80kg". HIKI appends it to <code>workouts.md</code>.</li>
+        <li>Two weeks later I ask "how's my bench been trending?". Claude reads <code>workouts.md</code> and tells me.</li>
+        <li>I mention a new AI tool I tried. Claude offers to log it to <code>ai.md</code>. I say yes.</li>
+        <li>Next conversation, Claude remembers I've used that tool. Opinions it expressed before are consistent.</li>
+      </ul>
+
+      <p>
+        It's embarrassingly useful. It's also the most fun side project I've had in years. I keep
+        thinking of new record types to add. Reading lists. People I meet. Books. Hot takes.
+      </p>
+
+      <h2>Should you build one?</h2>
+
+      <p>Probably. If you:</p>
+
+      <ul>
+        <li>Use Claude (or an MCP-compatible client) a lot</li>
+        <li>Hate re-explaining yourself</li>
+        <li>Can run a small Python server somewhere — a Mac mini, a $5 VPS, even a Raspberry Pi</li>
+        <li>Are willing to spend a weekend on it</li>
+      </ul>
+
+      <p>
+        I'll write up the how-to in more detail in a future post, including the exact Cloudflare
+        Tunnel setup and the MCPVault Worker config. For now, this is the shape of the thing.
+      </p>
+
+      <p>
+        Questions welcome — <a href="mailto:matt@matthitchman.com" class="link">matt@matthitchman.com</a>.
+      </p>
+
+      <p class="faint" style="margin-top: var(--sp-7); font-size: 0.875rem;">
+        — Matt
+      </p>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div>&copy; 2026 Matt Hitchman · Built in public.</div>
+      <div class="footer-links">
+        <a href="/about.html">About</a>
+        <a href="/blog.html">Blog</a>
+        <a href="mailto:matt@matthitchman.com">Email</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

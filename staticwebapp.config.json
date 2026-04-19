@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json.schemastore.org/staticwebapp.config.json",
+  "trailingSlash": "auto",
+  "mimeTypes": {
+    ".json": "application/json",
+    ".svg": "image/svg+xml"
+  },
+  "globalHeaders": {
+    "X-Content-Type-Options": "nosniff",
+    "X-Frame-Options": "SAMEORIGIN",
+    "Referrer-Policy": "strict-origin-when-cross-origin",
+    "Permissions-Policy": "geolocation=(), microphone=(), camera=()"
+  },
+  "routes": [
+    { "route": "/blog", "redirect": "/blog.html", "statusCode": 301 },
+    { "route": "/about", "redirect": "/about.html", "statusCode": 301 }
+  ],
+  "responseOverrides": {
+    "404": {
+      "rewrite": "/404.html",
+      "statusCode": 404
+    }
+  }
+}

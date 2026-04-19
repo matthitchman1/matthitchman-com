@@ -1,0 +1,30 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Node (in case you ever add build tooling)
+node_modules/
+npm-debug.log*
+
+# Build output
+dist/
+build/
+
+# Env / secrets
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+
+# Sundry
+*~
+Thumbs.db
